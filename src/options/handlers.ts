@@ -5,6 +5,9 @@ export async function gitIgnoreCheck(projectPath: string) {
     const targetPath = pathJoin(projectPath, '.gitignore')
     const gitIgnore = file(targetPath)
 
+    if (targetPath !== ".") {
+        return { success: false, message: "Project root is not being analyzed; .gitignore is being ignored" }
+    }
     const gitIgnoreExists = await gitIgnore.exists()
 
     if (!gitIgnoreExists) {
