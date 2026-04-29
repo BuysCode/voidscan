@@ -8,13 +8,13 @@ export async function gitIgnoreCheck(projectPath: string) {
     const gitIgnoreExists = await gitIgnore.exists()
 
     if (!gitIgnoreExists) {
-        return { success: false, message: "Arquivo .gitignore não encontrado." }
+        return { success: false, message: ".gitignore: Not Found." }
     }
 
     const gitIgnoreContent = await gitIgnore.text()
 
     if (gitIgnoreContent.trim().length === 0) {
-        return { success: false, message: "O seu .gitignore está vazio." }
+        return { success: false, message: ".gitignore: Empty." }
     }
 
     const envFile = file(pathJoin(projectPath, '.env'));
@@ -27,15 +27,15 @@ export async function gitIgnoreCheck(projectPath: string) {
     const testEnvExists = await testEnv.exists();
 
     if (envExists && !gitIgnoreContent.includes('.env')) {
-        return { success: false, message: "Arquivo .env detectado mas não ignorado no .gitignore." }
+        return { success: false, message: ".gitignore: .env exists but not included in .gitignore." }
     }
 
     if (localEnvExists && !gitIgnoreContent.includes('.env.local')) {
-        return { success: false, message: "Arquivo .env.local detectado mas não ignorado no .gitignore." }
+        return { success: false, message: ".gitignore: .env.local exists but not included in .gitignore." }
     }
 
     if (testEnvExists && !gitIgnoreContent.includes(".env.test")) {
-        return { success: false, message: "Arquivo .env.test detectado mas não ignorado no .gitignore." }
+        return { success: false, message: ".gitignore: .env.test exists but not included in .gitignore." }
     }
 
     return { success: true }
